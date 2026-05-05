@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7SH7RA7 | Home</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
     
 </head>
@@ -26,15 +27,20 @@
         <div class="acoes-usuario">
                 <input type="search" id="busca-input" placeholder="Estou procurando...">
                 <a href="login.html" class="bot-login">Entrar / Cadastrar</a>
-                <button id="bot-abrir-carrinho" class="bot-carrinho" aria-label="Abrir Carrinho">🛒</button>
+                <button id="bot-abrir-carrinho" class="bot-carrinho" aria-label="Abrir Carrinho">
+                    <i class="ph ph-shopping-cart"></i> <!--Icone de carrinho--> 
+                </button>
         </div>
     </header>
-    
+
 <!--Carrinho Lateral-->
     <aside id="carrinho-lateral" class="carrinho-lateral">
         <div class="carrinho-header">
             <h2>Seu Carrinho</h2>
-            <button id="bot-fechar-carrinho" aria-label="Fechar Carrinho">X</button>
+            <button id="bot-fechar-carrinho" class="bot-fechar-carrinho" aria-label="Fechar Carrinho">
+                <i class="ph ph-x"></i> <!--Icone de X-->
+            </button>
+
         </div>
         <div class="carrinho-conteudo">
             <p>O carrinho está vazio.</p>
@@ -43,23 +49,33 @@
 <!--Conteudo Principal-->
     
     <main class="corpo">
-        <section class="banners">
-                <div class="banner">Banner Destaque 1</div>
-                <div class="banner">Banner Destaque 2</div>
-                <div class="banner">Banner Destaque 3</div>
+        <section class="carrossel-banners">
+            <div class="carrossel-trilha" id="trilha-banners">
+                <a href="pagina-poster01.html" class="banner-slide">
+                    <img src="assets/poster01.jpg" alt="poster01" onerror="this.onerror=null; this.src='assets/placeholder.jpg';">
+                </a>
+                <a href="pagina-poster02.html" class="banner-slide">
+                    <img src="assets/poster02.jpg" alt="poster02" onerror="this.onerror=null; this.src='assets/placeholder.jpg';">
+                </a>
+                <a href="pagina-poster02.html" class="banner-slide">
+                    <img src="assets/poster02.jpg" alt="poster02" onerror="this.onerror=null; this.src='assets/placeholder.jpg';">
+                </a>                                
+            </div>
+            <button class="bot-carrossel" id="bot-anterior"><i class="ph ph-caret-left"></i></button>
+            <button class="bot-carrossel" id="bot-proximo"><i class="ph ph-caret-right"></i></button>
         </section>
         
         <section class="vitrine-promocao">
             <h2>Promoções</h2>
             <div class="grid-produtos">
-                    <!--Produtos-->
+                    
             </div>
         </section>
 
         <section class="vitrine-mais-vendidos">
             <h2>Mais Vendidos</h2>
             <div class="grid-produtos">
-                    <!--Produtos-->
+
             </div>
         </section>
         <div class="acoes-vitrine">

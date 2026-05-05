@@ -6,12 +6,14 @@
 --cor-texto: #333333;
 --fonte-principal: Arial, Helvetica, sans-serif;
 }
+
 /*Reset Global*/
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 /*Base*/
 body {
     font-family: var(--fonte-principal);
@@ -21,6 +23,8 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
+
+/*Cabeçalho*/
 .header-global {
     display: flex;
     justify-content: space-between;
@@ -34,7 +38,6 @@ body {
     list-style: none;
     gap: 1.5rem;
 }
-
 .menu-categorias a, .header-global a {
     color: white;
     text-decoration: none;
@@ -45,6 +48,7 @@ body {
     gap: 1rem;
 }
 
+/*Corpo e Rodapé*/
 .corpo {
     flex: 1; /*Ocupa p espaço livre*/
     padding: 2rem;
@@ -61,6 +65,8 @@ body {
     list-style: none;
     margin-bottom: 0.5rem;
 }
+
+/*Comportamento do carrinho lateral*/
 .carrinho-lateral{
     position: fixed;
     top: 0;
@@ -73,7 +79,8 @@ body {
     z-index: 1000;
     padding: 1.5rem;
 }
-/*Classe JS*/
+
+/*Classe JS - Carrinho Lateral*/
 .carrinho-lateral.aberto{
     right: 0;
 }
@@ -82,4 +89,151 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+}
+
+/*Vitrine dos produtos*/
+.vitrine-promocao, .vitrine-mais-vendidos{
+    margin: 3rem 0;
+}
+.vitrine-promocao h2, .vitrine-mais-vendidos h2{
+    margin-bottom: 1.5rem;
+    color: var(--cor-primaria);
+}
+.grid-produtos{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /*Faz os itens ficarem responsivos e iguais*/
+    gap: 2rem;
+    padding: 1rem;
+}
+
+/*Cartão de produto*/
+.cartao-produto{
+    background-color: white;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cartao-produto:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.cartao-produto img{
+    width: 100%;
+    max-width: 200px;
+    height: 250px;
+    object-fit: cover;
+    background-color: #eeeeee;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+.info-produto{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+.titulo-produto{
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: var(--cor-primaria);
+}
+.bot-comprar {
+    background-color: var(--cor-secundaria);
+    color: var(--cor-primaria);
+    border: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: auto; /*Força o botao no fundo*/
+    transition: filter 0.2s ease;
+}
+.bot-comprar:hover{
+    filter: brightness(0.9);   
+}
+
+/*Botões Transparentes do Header e Carrinho*/
+.bot-carrinho{
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+.bot-fechar-carrinho{
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--cor-texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+.bot-fechar-carrinho:hover{
+    color: red;
+}
+
+/*CARROSSEL DE POSTERS*/
+/*Container Principal*/
+.carrossel-banners{
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+/*Esteira do Carrossel*/
+.carrossel-trilha{
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease-in-out; /*Deslizamento*/
+}
+.banner-slide{
+    min-width: 100%;
+    height: 100%;
+    display: block;
+}
+.banner-slide img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/*Navegação do Carrossel*/
+.bot-carrossel{
+    position: absolute; /*Posicao livre pras setas, por cima das outras*/
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 40%;
+    opacity: 0;
+    transition: opacity 0.3s ease, background 0.3s ease;
+    z-index: 10;
+}
+.carrossel-banners:hover .bot-carrossel{
+    opacity: 1;
+}
+.bot-carrossel:hover{
+    background: rgba(255, 255, 255, 1);
+}
+#bot-anterior{
+    left: 2rem;
+}
+#bot-proximo{
+    right: 2rem;
 }
