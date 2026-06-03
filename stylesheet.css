@@ -204,10 +204,11 @@ body {
     height: 100%;
     display: block;
 }
-.banner-slide img{
-    width: 100%;
+.banner-slide {
+    min-width: 100%;
     height: 100%;
-    object-fit: cover;
+    display: block;
+    flex: 0 0 100%; 
 }
 
 /*Navegação do Carrossel*/
@@ -236,4 +237,95 @@ body {
 }
 #bot-proximo{
     right: 2rem;
+}
+
+/* Modal Overlay (Fundo Escuro) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none; /* Escondido por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* Classe controlada pelo JS para exibir o modal */
+.modal-overlay.ativo {
+    display: flex;
+}
+
+/* Caixa principal do Modal */
+.modal-conteudo {
+    background-color: white;
+    width: 95vw;
+    height: 95vh;
+    max-width: none; 
+    border-radius: 8px;
+    display: flex;
+    position: relative;
+    padding: 2rem;
+    gap: 2rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+/* Botão de fechar */
+#bot-fechar-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+/* Galeria Esquerda */
+.modal-galeria {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+.modal-galeria img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+}
+.bot-galeria {
+    position: absolute;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#modal-bot-anterior { left: 10px; }
+#modal-bot-proximo { right: 10px; }
+
+/* Informações Direita */
+.modal-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+}
+.preco-destaque {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--cor-primaria);
+}
+.preco-parcelado {
+    font-size: 0.9rem;
+    color: #666;
+}
+.modal-opcoes {
+    margin-bottom: auto; /* Empurra o botão de compra para baixo */
 }

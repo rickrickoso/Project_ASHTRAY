@@ -1,137 +1,335 @@
-// DOM
-const botAbrirCarrinho = document.getElementById('bot-abrir-carrinho');
-const botFecharCarrinho = document.getElementById('bot-fechar-carrinho');
-const carrinhoLateral = document.getElementById('carrinho-lateral');
+/**Classe simuladora de consumo de API 
+ * Isola a lógica de comunicação externa
+ * buscarDados faz requisição HTTP assincrona pro JSON e transformar em objeto no JS 
+*/
 
-// Funções
-function abrirCarrinho(){
-    carrinhoLateral.classList.add('aberto');
+class DatabaseService {
+    async buscarDados(url){
+        try{
+            const resposta = await fetch(url);
+            if(!resposta.ok) throw new Error('Falha ao carregar os dados');
+            return await resposta.json();
+        } catch (erro){
+            console.error("Erro no DatabaseService:", erro);
+            return {promocoes: [], maisVendidos:[]};
+        }
+    }
 }
 
-function fecharCarrinho(){
-    carrinhoLateral.classList.remove('aberto');
+/**Classe Comportamento - Carrinho Lateral  */
+
+class CarrinhoLateral{
+    /**Constructor monta a instancia da classe */
+    constructor(botaoAbrirId, botaoFecharId, conteinerId) {
+        /**this se refere a propria classe, igual o self do python */
+        this.botaoAbrir = document.getElementById(botaoAbrirId);
+        this.botaoFechar = document.getElementById(botaoFecharId);
+        this.container = document.getElementById(conteinerId);
+
+        this.inicializarEventos();
+    }
+    /** controlador */
+    inicializarEventos(){
+        if (this.botaoAbrir){
+            this.botaoAbrir.addEventListener('click', () => this.abrir());
+            this.botaoFechar.addEventListener('click', () => this.fechar())
+        }
+    }
+
+    /**eventos */
+    abrir(){
+        this.container.classList.add('aberto');
+    }
+
+    fechar(){
+        this.container.classList.remove('aberto');
+    }
 }
 
+/**
+ * Classe - Carrossel e Banners
+ */
+class Carrossel {
+    constructor(trilhaId, botAnteriorId, botProximoId, areaId, seletorBanners){
+        this.trilha = document.getElementById(trilhaId);
+        this.botAnterior = document.getElementById(botAnteriorId);
+        this.botProximo = document.getElementById(botProximoId);
+        this.areaCarrossel = document.querySelector(areaId);
+        this.banners = document.querySelectorAll(seletorBanners);
 
-// Simulacao JSON do BD -----------------------------------------------
-const roupasCadastradasPromocoes = [
-    {
-        id: 1,
-        nome: "Camiseta Xtranha",
-        preco: "R$ 89,90",
-        imagem: "assets/camisa-xtranha.jpg"
-    },
-    {
-        id: 2,
-        nome: "Moletom #FreeVetin",
-        preco: "R$ 145,00",
-        imagem: "assets/moletom-freevetin.jpg"
-    },
-    {
-        id: 3,
-        nome: "Boné TrapMixtape",
-        preco: "R$ 55,00",
-        imagem: "assets/bone-trapmixtape.jpg"
+        this.indiceAtual = 0;
+        this.totalBanners = this.banners.length;
+        this.intervaloCarrossel = null;
+
+        if (this.totalBanners > 0){
+            this.inicializarEventos();
+            this.iniciarAutoPlay();
+        }
     }
-];
 
-const roupasCadastradasMaisVendidos = [
-    {
-        id: 1,
-        nome: "Camiseta Xtranha",
-        preco: "R$ 89,90",
-        imagem: "assets/camisa-xtranha.jpg"
-    },
-    {
-        id: 2,
-        nome: "Moletom #FreeVetin",
-        preco: "R$ 145,00",
-        imagem: "assets/moletom-freevetin.jpg"
-    },
-    {
-        id: 3,
-        nome: "Boné TrapMixtape",
-        preco: "R$ 55,00",
-        imagem: "assets/bone-trapmixtape.jpg"
-    },
-        {
-        id: 4,
-        nome: "Boné CrepeMilkshake",
-        preco: "R$ 75,00",
-        imagem: "assets/bone-crepemilkshake.jpg"
+    atualizarPosicao(){
+        this.trilha.style.transform = `translateX(-${this.indiceAtual * 100}%)`;
     }
-    
-];
-// -------------------------------------------------------------------
-const gridVitrine = document.querySelector('.vitrine-promocao .grid-produtos');
-const gridVitrine2 = document.querySelector('.vitrine-mais-vendidos .grid-produtos');
-function renderizarProdutos(listaDeRoupas, containerHtml){
-    containerHtml.innerHTML = '';
 
-    listaDeRoupas.forEach(function(roupa){
-        const moldeHtml = `
-            <div class="cartao-produto">
-                <img src="${roupa.imagem}" alt="${roupa.nome}" onerror="this.onerror=null; this.src='assets/placeholder.jpg';">
-                <div class="info-produto">
-                    <h3 class="titulo-produto">${roupa.nome}</h3>
-                    <p class="preco-produto">${roupa.preco}</p>
-                    <button class="bot-comprar" data-id="${roupa.id}">
-                        <i class="ph ph-bag"></i> Adicionar
-                    </button>
-                </div>
-            </div>
-        `;
-        containerHtml.innerHTML += moldeHtml;
+    proximo(){
+        this.indiceAtual = (this.indiceAtual + 1) % this.totalBanners;
+        this.atualizarPosicao();
+    }
+
+    anterior(){
+        this.indiceAtual = (this.indiceAtual - 1 + this.totalBanners) % this.totalBanners;
+        this.atualizarPosicao();
+    }
+
+    iniciarAutoPlay(){
+        this.pausarAutoPlay(); // garante que intervalos nao vao se repetir
+        this.intervaloCarrossel = setInterval(() => this.proximo(), 4000);
+    }
+
+    pausarAutoPlay(){
+        clearInterval(this.intervaloCarrossel);
+    }
+
+    inicializarEventos(){
+        //** Botoes do Carrossel */
+        this.botProximo.addEventListener('click', () => {
+            this.proximo();
+            this.iniciarAutoPlay();
+        });
+
+        this.botAnterior.addEventListener('click', () => {
+            this.anterior();
+            this.iniciarAutoPlay();
+        });
+
+        this.areaCarrossel.addEventListener('mouseenter', () => this.pausarAutoPlay());
+        this.areaCarrossel.addEventListener('mouseleave', () => this.iniciarAutoPlay());
+    }
+}       
+/**Classe - Produtos <template> */
+class RenderizadorProdutos{
+    constructor (templateId, modalInstancia, carrinhoInstancia){
+        this.template = document.getElementById(templateId);
+        this.modal = modalInstancia;
+        this.carrinho = carrinhoInstancia;
+    }
+
+    renderizar(listaDeRoupas, seletorContainer){
+        const container = document.querySelector(seletorContainer);
+        if (!container || !this.template) return;
+
+        container.innerHTML = '';
+        const fragmento = document.createDocumentFragment();
+
+        listaDeRoupas.forEach((roupa) => {
+            const clone = this.template.content.cloneNode(true);
+            const cartao = clone.querySelector('.cartao-produto');
+
+            const img = clone.querySelector('.produto-img');
+            img.src = roupa.imagens ? roupa.imagens[0] : roupa.imagem;
+            img.alt = roupa.nome;
+            img.onerror = (evento) => {
+                evento.target.onerror = null;
+                evento.target.src = 'assets/placeholder.jpg';
+            };
+            
+            clone.querySelector('.titulo-produto').textContent = roupa.nome;
+            clone.querySelector('.preco-produto').textContent = roupa.preco;
+            clone.querySelector('.bot-comprar').dataset.id = roupa.id;
+
+            // Clique: Pop-up de Produto
+            // Verifica se o elemento clicado foi o botão de compra
+            cartao.addEventListener('click', (evento) => { 
+                const clicouNoBotao = evento.target.closest('.bot-comprar');
+                if (clicouNoBotao) {
+                    const id = clicouNoBotao.dataset.id;
+                    this.carrinho.adicionarItem(id);    
+                    return;
+            }
+            // Se o clique foi em qualquer outro lugar do cartão, abre o modal
+            this.modal.abrir(roupa);
+        });
+        fragmento.appendChild(clone);
     });
+    container.appendChild(fragmento);
+    }
 }
 
-renderizarProdutos(roupasCadastradasPromocoes, gridVitrine);
-renderizarProdutos(roupasCadastradasMaisVendidos, gridVitrine2);
+/** Classe Inicialização do App */
+class App {
+    constructor(){
+        // Serviços de Dados e Interface Básica
+        this.dbService = new DatabaseService();
+        this.carrinhoBarra = new CarrinhoLateral('bot-abrir-carrinho', 'bot-fechar-carrinho', 'carrinho-lateral');
+        this.carrossel = new Carrossel('trilha-banners', 'bot-anterior', 'bot-proximo', '.carrossel-banners', '.banner-slide');
+        
+        // 1. Instancia o cérebro lógico (matemático) do carrinho
+        this.gerenciadorCarrinho = new GerenciadorCarrinho();
 
-// CARROSSEL
-// Mapeamento de elementos
-const trilhaBanners = document.getElementById('trilha-banners');
-const botAnterior = document.getElementById('bot-anterior');
-const botProximo = document.getElementById('bot-proximo');
-const banners = document.querySelector('.banner-slide');
-const areaCarrossel = document.querySelector('.carrossel-banners');
+        // 2. Passa o gerenciador de carrinho como parâmetro para o Modal e Renderizador
+        this.modal = new ModalProduto(this.gerenciadorCarrinho);
+        this.renderizador = new RenderizadorProdutos('template-cartao-produto', this.modal, this.gerenciadorCarrinho);
+    }
 
-//Variaveis de controle
-let indiceAtual = 0; 
-const totalBanners = banners.length;
-let intervaloCarrossel; //autoplay
+    async iniciar() {
+        const dados = await this.dbService.buscarDados('db.json');
 
-//Move o Carrossel
-function atualizarCarrossel(){
-    //Move a trilha pra esquerda usando o indice atual de base
-    trilhaBanners.style.transform = `translateX(-${indiceAtual * 100})`;
+        // Unifica os catálogos para o carrinho saber pesquisar todos os produtos
+        const catalogoCompleto = [...dados.promocoes, ...dados.maisVendidos];
+        this.gerenciadorCarrinho.setCatalogo(catalogoCompleto);
+
+        this.renderizador.renderizar(dados.promocoes, '.vitrine-promocao .grid-produtos');
+        this.renderizador.renderizar(dados.maisVendidos, '.vitrine-mais-vendidos .grid-produtos');
+    }
 }
 
-//Funcoes das setas
-function proximoBanner(){
-    //Pula pro proximo poster. No último volta pro primeiro.
-    indiceAtual = (indiceAtual + 1) % totalBanners;
-    atualizarCarrossel();
-}
-function bannerAnterior(){
-    //Volta um. No primeiro pula pro ultimo.
-    indiceAtual = (indiceAtual - 1 + totalBanners) % totalBanners;
-    atualizarCarrossel();
+/** Inicializa o sistema -> DOM carregada */
+document.addEventListener('DOMContentLoaded', () => {
+    const aplicacao = new App();
+    aplicacao.iniciar();
+});
+
+/** Classe - Gerenciador do Modal de Produto */
+class ModalProduto {
+    constructor(carrinhoInstancia) {
+        this.carrinho = carrinhoInstancia;
+        this.overlay = document.getElementById('modal-produto');
+        this.botFechar = document.getElementById('bot-fechar-modal');
+        
+        // Elementos de injeção de dados
+        this.imgPrincipal = document.getElementById('modal-img-principal');
+        this.titulo = document.getElementById('modal-titulo');
+        this.preco = document.getElementById('modal-preco');
+        this.parcelamento = document.getElementById('modal-parcelamento');
+        this.tamanhos = document.getElementById('modal-tamanhos');
+        this.cores = document.getElementById('modal-cores');
+        this.botComprar = document.getElementById('modal-bot-comprar');
+
+        // Controles de Galeria
+        this.botAnterior = document.getElementById('modal-bot-anterior');
+        this.botProximo = document.getElementById('modal-bot-proximo');
+        
+        this.imagensAtuais = [];
+        this.indiceImagem = 0;
+
+        this.inicializarEventos();
+    }
+
+    abrir(roupa) {
+        // Preenche os dados
+        this.titulo.textContent = roupa.nome;
+        this.preco.textContent = roupa.preco;
+        this.parcelamento.textContent = roupa.parcelamento || ''; // Trata se não existir
+        this.tamanhos.textContent = roupa.tamanhos ? roupa.tamanhos.join(', ') : 'Único';
+        this.cores.textContent = roupa.cores ? roupa.cores.join(', ') : 'Padrão';
+        this.botComprar.dataset.id = roupa.id;
+
+        // Configura a Galeria
+        this.imagensAtuais = roupa.imagens || [roupa.imagem]; // Aceita o array novo ou a imagem antiga
+        this.indiceImagem = 0;
+        this.atualizarImagem();
+
+        // Mostra o Modal
+        this.overlay.classList.add('ativo');
+    }
+
+    fechar() {
+        this.overlay.classList.remove('ativo');
+    }
+
+    atualizarImagem() {
+        this.imgPrincipal.src = this.imagensAtuais[this.indiceImagem];
+    }
+
+    navegarGaleria(direcao) {
+        this.indiceImagem = (this.indiceImagem + direcao + this.imagensAtuais.length) % this.imagensAtuais.length;
+        this.atualizarImagem();
+    }
+
+    inicializarEventos() {
+        // Fecha no botão X
+        this.botFechar.addEventListener('click', () => this.fechar());
+        
+        // Fecha clicando fora do modal (no fundo preto)
+        this.overlay.addEventListener('click', (evento) => {
+            if (evento.target === this.overlay) this.fechar();
+        });
+
+        // Setas da galeria (1 para direita, -1 para esquerda)
+        this.botProximo.addEventListener('click', () => this.navegarGaleria(1));
+        this.botAnterior.addEventListener('click', () => this.navegarGaleria(-1));
+
+        // PROTEÇÃO: Placeholder para imagens quebradas na galeria
+        this.imgPrincipal.onerror = (evento) => {
+            evento.target.onerror = null; 
+            evento.target.src = 'assets/placeholder.jpg';
+        };
+        // Adiciona o item no carrinho
+        this.botComprar.addEventListener('click', () => {
+            const id = this.botComprar.dataset.id;
+            this.carrinho.adicionarItem(id);
+            this.fechar();            
+        });
+    }
 }
 
-function iniciarAutoPlay(){
-    intervaloCarrossel = setInterval(proximoBanner, 4000);
-}
-function pausarAutoPlay(){
-    clearInterval(intervaloCarrossel);
-}
+/** Classe - Gerenciador de Compras e Totais */
+class GerenciadorCarrinho {
+    constructor() {
+        this.itens = []; 
+        this.conteudoCarrinho = document.querySelector('.carrinho-conteudo');
+        this.catalogo = []; 
+    }
 
-// Listeners
-botAbrirCarrinho.addEventListener('click', abrirCarrinho);
-botFecharCarrinho.addEventListener('click', fecharCarrinho);
-botProximo.addEventListener('click', proximoBanner);
-botAnterior.addEventListener('click', bannerAnterior);
-areaCarrossel.addEventListener('mouseenter', pausarAutoPlay);
-areaCarrossel.addEventListener('mouseleave', iniciarAutoPlay);
+    setCatalogo(produtos) {
+        this.catalogo = produtos;
+    }
 
-iniciarAutoPlay();
+    adicionarItem(idProduto) {
+        const produto = this.catalogo.find(item => item.id === parseInt(idProduto));
+
+        if (produto) {
+            this.itens.push(produto);
+            this.atualizarInterface();
+            document.getElementById('carrinho-lateral').classList.add('aberto');
+        }
+    }
+
+    atualizarInterface() {
+        if (this.itens.length === 0) {
+            this.conteudoCarrinho.innerHTML = '<p>O carrinho está vazio.</p>';
+            return;
+        }
+
+        this.conteudoCarrinho.innerHTML = ''; 
+        let total = 0;
+
+        this.itens.forEach((item, index) => {
+            const precoNumerico = parseFloat(item.preco.replace('R$ ', '').replace(',', '.'));
+            total += precoNumerico;
+
+            const divItem = document.createElement('div');
+            divItem.style.display = 'flex';
+            divItem.style.gap = '10px';
+            divItem.style.marginBottom = '15px';
+            divItem.style.borderBottom = '1px solid #eee';
+            divItem.style.paddingBottom = '10px';
+
+            divItem.innerHTML = `
+                <img src="${item.imagens ? item.imagens[0] : item.imagem}" alt="${item.nome}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                <div style="flex: 1; text-align: left;">
+                    <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 5px;">${item.nome}</p>
+                    <p style="color: var(--cor-primaria);">${item.preco}</p>
+                </div>
+            `;
+            this.conteudoCarrinho.appendChild(divItem);
+        });
+
+        const divTotal = document.createElement('div');
+        divTotal.style.marginTop = '20px';
+        divTotal.style.fontWeight = 'bold';
+        divTotal.style.fontSize = '1.2rem';
+        divTotal.innerHTML = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+        this.conteudoCarrinho.appendChild(divTotal);
+    }
+}

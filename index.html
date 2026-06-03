@@ -92,5 +92,49 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- Template para produto -->
+    <template id="template-cartao-produto">
+        <div class="cartao-produto">
+            <img src="" alt="" class="produto-img">
+            <div class="info-produto">
+                <h3 class="titulo-produto"></h3>
+                <p class="preco-produto"></p>
+                <button class="bot-comprar" data-id="">
+                    <i class="ph ph-bag"></i> Adicionar
+                </button>
+            </div>
+        </div>
+    </template>
+    
+    <!--Pop-up de Produto-->
+    <div id="modal-produto" class="modal-overlay">
+    <div class="modal-conteudo">
+        <button id="bot-fechar-modal" class="bot-fechar-carrinho" aria-label="Fechar Modal">
+            <i class="ph ph-x"></i>
+        </button>
+
+        <div class="modal-galeria">
+            <button class="bot-galeria" id="modal-bot-anterior"><i class="ph ph-caret-left"></i></button>
+            <img id="modal-img-principal" src="" alt="Imagem do Produto">
+            <button class="bot-galeria" id="modal-bot-proximo"><i class="ph ph-caret-right"></i></button>
+        </div>
+
+        <div class="modal-info">
+            <h2 id="modal-titulo"></h2>
+            <p id="modal-preco" class="preco-destaque"></p>
+            <p id="modal-parcelamento" class="preco-parcelado"></p>
+            
+            <div class="modal-opcoes">
+                <p><strong>Tamanhos:</strong> <span id="modal-tamanhos"></span></p>
+                <p><strong>Cores:</strong> <span id="modal-cores"></span></p>
+            </div>
+
+            <button id="modal-bot-comprar" class="bot-comprar" data-id="">
+                <i class="ph ph-bag"></i> Adicionar ao Carrinho
+            </button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
