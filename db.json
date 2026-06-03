@@ -1,0 +1,97 @@
+{
+  "promocoes": [
+    {
+      "id": 1,
+      "nome": "Camiseta Xtranha",
+      "preco": "R$ 89,90",
+      "parcelamento": "ou 3x de R$ 29,96 sem juros",
+      "imagens": [
+        "assets/camisa-xtranha.jpg",
+        "assets/camisa-xtranha-costas.jpg",
+        "assets/camisa-xtranha-detalhe.jpg"
+      ],
+      "tamanhos": ["P", "M", "G", "GG"],
+      "cores": ["Preto", "Branco"]
+    },
+    {
+      "id": 2,
+      "nome": "Moletom #FreeVetin",
+      "preco": "R$ 145,00",
+      "parcelamento": "ou 3x de R$ 48,33 sem juros",
+      "imagens": [
+        "assets/moletom-freevetin.jpg",
+        "assets/moletom-freevetin-costas.jpg",
+        "assets/moletom-freevetin-detalhe.jpg"
+      ],
+      "tamanhos": ["P", "M", "G", "GG"],
+      "cores": ["Vermelho", "Preto"]
+    },
+    {
+      "id": 3,
+      "nome": "Boné TrapMixtape",
+      "preco": "R$ 55,00",
+      "parcelamento": "ou 2x de R$ 27,50 sem juros",
+      "imagens": [
+        "assets/bone-trapmixtape.jpg",
+        "assets/bone-trapmixtape-costas.jpg",
+        "assets/bone-trapmixtape-detalhe.jpg"
+      ],
+      "tamanhos": ["Único"],
+      "cores": ["Preto"]
+    }
+  ],
+  "maisVendidos": [
+    {
+      "id": 1,
+      "nome": "Camiseta Xtranha",
+      "preco": "R$ 89,90",
+      "parcelamento": "ou 3x de R$ 29,96 sem juros",
+      "imagens": [
+        "assets/camisa-xtranha.jpg",
+        "assets/camisa-xtranha-costas.jpg",
+        "assets/camisa-xtranha-detalhe.jpg"
+      ],
+      "tamanhos": ["P", "M", "G", "GG"],
+      "cores": ["Preto", "Branco"]
+    },
+    {
+      "id": 2,
+      "nome": "Moletom #FreeVetin",
+      "preco": "R$ 145,00",
+      "parcelamento": "ou 3x de R$ 48,33 sem juros",
+      "imagens": [
+        "assets/moletom-freevetin.jpg",
+        "assets/moletom-freevetin-costas.jpg",
+        "assets/moletom-freevetin-detalhe.jpg"
+      ],
+      "tamanhos": ["P", "M", "G", "GG"],
+      "cores": ["Vermelho", "Preto"]
+    },
+    {
+      "id": 3,
+      "nome": "Boné TrapMixtape",
+      "preco": "R$ 55,00",
+      "parcelamento": "ou 2x de R$ 27,50 sem juros",
+      "imagens": [
+        "assets/bone-trapmixtape.jpg",
+        "assets/bone-trapmixtape-costas.jpg",
+        "assets/bone-trapmixtape-detalhe.jpg"
+      ],
+      "tamanhos": ["Único"],
+      "cores": ["Preto"]
+    },
+    {
+      "id": 4,
+      "nome": "Boné CrepeMilkshake",
+      "preco": "R$ 75,00",
+      "parcelamento": "ou 3x de R$ 25,00 sem juros",
+      "imagens": [
+        "assets/bone-crepemilkshake.jpg",
+        "assets/bone-crepemilkshake-costas.jpg",
+        "assets/bone-crepemilkshake-detalhe.jpg"
+      ],
+      "tamanhos": ["Único"],
+      "cores": ["Branco", "Preto"]
+    }
+  ]
+}
